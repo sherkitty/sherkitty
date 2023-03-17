@@ -61,7 +61,6 @@ If you need help/support/info about translations, contact the localization workg
 | Type      | Status |
 |-----------|--------|
 | Coverity  | [![Coverity Status](https://scan.coverity.com/projects/9657/badge.svg)](https://scan.coverity.com/projects/9657/)
-| OSS Fuzz  | [![Fuzzing Status](https://oss-fuzz-build-logs.storage.googleapis.com/badges/sherkitty.svg)](https://bugs.chromium.org/p/oss-fuzz/issues/list?sort=-opened&can=1&q=proj:sherkitty)
 | Coveralls | [![Coveralls Status](https://coveralls.io/repos/github/sherkitty/sherkitty/badge.svg?branch=master)](https://coveralls.io/github/sherkitty/sherkitty?branch=master)
 | License   | [![License](https://img.shields.io/badge/license-BSD3-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
@@ -90,24 +89,17 @@ As with many development projects, the repository on GitHub is considered to be 
 Sherkitty is a 100% community-sponsored endeavor. If you want to join our efforts, the easiest thing you can do is support the project financially. Both Sherkitty and Bitcoin donations can be made to **donate.getsherkitty.org** if using a client that supports the [OpenAlias](https://openalias.org) standard. Alternatively, you can send XKTTY to the Sherkitty donation address via the `donate` command (type `help` in the command-line wallet for details).
 
 The Sherkitty donation address is:  
-`888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H`  
+`TBA`  
 Viewkey:  
-`f359631075708155cc3d92a32b75a7d02a5dcf27756707b47a2b31b21c389501`  
+`TBA  
 Base address for restoring with address and viewkey:
-`44AFFq5kSiGBoZ4NMDwYtN18obc8AemS33DBLWs3H7otXft3XjrpDtQGv7SqSsaBYBb98uNbr2VBBEt7f2wfn3RVGQBEP3A`  
+`TBA`  
 
 The Bitcoin donation address is:  
-`1KTexdemPdxSBcG55heUuTjDRYqbC5ZL8H`
+`TBA`
 
 Core development funding and/or some supporting services are also graciously provided by [sponsors](https://www.getsherkitty.org/community/sponsorships/):
 
-[<img width="150" src="https://www.getsherkitty.org/img/sponsors/tarilabs.png"/>](https://tarilabs.com/)
-[<img width="150" src="https://www.getsherkitty.org/img/sponsors/globee.png"/>](https://globee.com/)
-[<img width="150" src="https://www.getsherkitty.org/img/sponsors/symas.png"/>](https://symas.com/)
-[<img width="150" src="https://www.getsherkitty.org/img/sponsors/forked_logo.png"/>](http://www.forked.net/)
-[<img width="150" src="https://www.getsherkitty.org/img/sponsors/macstadium.png"/>](https://www.macstadium.com/)
-
-There are also several mining pools that kindly donate a portion of their fees, [a list of them can be found on our Bitcointalk post](https://bitcointalk.org/index.php?topic=583449.0).
 
 ## License
 
