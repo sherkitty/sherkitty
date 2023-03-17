@@ -1023,7 +1023,7 @@ std::string get_nix_version_display_string()
     GetConsoleMode(hConIn, &oldMode);
     SetConsoleMode(hConIn, ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT);
 
-    wchar_t buffer[1038];
+    wchar_t buffer[1024];
     DWORD read;
 
     ReadConsoleW(hConIn, buffer, sizeof(buffer)/sizeof(wchar_t)-1, &read, nullptr);
@@ -1107,7 +1107,7 @@ std::string get_nix_version_display_string()
 
   std::string get_human_readable_bytes(uint64_t bytes)
   {
-    // Use 1038 for "kilo", 1038*1038 for "mega" and so on instead of the more modern and standard-conforming
+    // Use 1024 for "kilo", 1024*1024 for "mega" and so on instead of the more modern and standard-conforming
     // 1000, 1000*1000 and so on, to be consistent with other Sherkitty code that also uses base 2 units
     struct byte_map
     {
@@ -1117,11 +1117,11 @@ std::string get_nix_version_display_string()
 
     static constexpr const byte_map sizes[] =
     {
-        {"%.0f B", 1038},
-        {"%.2f kB", 1038 * 1038},
-        {"%.2f MB", std::uint64_t(1038) * 1038 * 1038},
-        {"%.2f GB", std::uint64_t(1038) * 1038 * 1038 * 1038},
-        {"%.2f TB", std::uint64_t(1038) * 1038 * 1038 * 1038 * 1038}
+        {"%.0f B", 1024},
+        {"%.2f kB", 1024 * 1024},
+        {"%.2f MB", std::uint64_t(1024) * 1024 * 1024},
+        {"%.2f GB", std::uint64_t(1024) * 1024 * 1024 * 1024},
+        {"%.2f TB", std::uint64_t(1024) * 1024 * 1024 * 1024 * 1024}
     };
 
     struct bytes_less
@@ -1135,7 +1135,7 @@ std::string get_nix_version_display_string()
     const auto size = std::upper_bound(
         std::begin(sizes), std::end(sizes) - 1, byte_map{"", bytes}, bytes_less{}
     );
-    const std::uint64_t divisor = size->bytes / 1038;
+    const std::uint64_t divisor = size->bytes / 1024;
     return (boost::format(size->format) % (double(bytes) / divisor)).str();
   }
 

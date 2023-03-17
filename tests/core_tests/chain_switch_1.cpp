@@ -45,7 +45,7 @@ gen_chain_switch_1::gen_chain_switch_1()
 //-----------------------------------------------------------------------------------------------------
 bool gen_chain_switch_1::generate(std::vector<test_event_entry>& events) const
 {
-  uint64_t ts_start = 0;
+  uint64_t ts_start = 1338224400;
   /*
   (0 )-(1 )-(2 ) -(3 )-(4 )                  <- main chain, until 7 isn't connected
               \ |-(5 )-(6 )-(7 )|            <- alt chain, until 7 isn't connected

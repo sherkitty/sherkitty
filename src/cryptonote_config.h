@@ -114,7 +114,7 @@
 #define CRYPTONOTE_NOISE_EPOCH_RANGE                    30     // seconds
 #define CRYPTONOTE_NOISE_MIN_DELAY                      10     // seconds
 #define CRYPTONOTE_NOISE_DELAY_RANGE                    5      // seconds
-#define CRYPTONOTE_NOISE_BYTES                          3*1038 // 3 KiB
+#define CRYPTONOTE_NOISE_BYTES                          3*1024 // 3 KiB
 #define CRYPTONOTE_NOISE_CHANNELS                       2      // Max outgoing connections per zone used for noise/covert sending
 
 // Both below are in seconds. The idea is to delay forwarding from i2p/tor
@@ -164,7 +164,7 @@
 #define RPC_PAYMENTS_DATA_FILENAME              "rpcpayments.bin"
 #define MINER_CONFIG_FILE_NAME                  "miner_conf.json"
 
-#define THREAD_STACK_SIZE                       5 * 1038 * 1038
+#define THREAD_STACK_SIZE                       5 * 1024 * 1024
 
 #define HF_VERSION_DYNAMIC_FEE                  4
 #define HF_VERSION_MIN_MIXIN_4                  6
@@ -217,9 +217,9 @@ namespace config
   uint64_t const CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 18;
   uint64_t const CRYPTONOTE_PUBLIC_INTEGRATED_ADDRESS_BASE58_PREFIX = 19;
   uint64_t const CRYPTONOTE_PUBLIC_SUBADDRESS_BASE58_PREFIX = 42;
-  uint16_t const P2P_DEFAULT_PORT = 56980;
-  uint16_t const RPC_DEFAULT_PORT = 56981;
-  uint16_t const ZMQ_RPC_DEFAULT_PORT = 56982;
+  uint16_t const P2P_DEFAULT_PORT = 18080;
+  uint16_t const RPC_DEFAULT_PORT = 18081;
+  uint16_t const ZMQ_RPC_DEFAULT_PORT = 18082;
   boost::uuids::uuid const NETWORK_ID = { {
       0x12 ,0x30, 0xF1, 0x71 , 0x61, 0x04 , 0x41, 0x61, 0x17, 0x31, 0x00, 0x82, 0x16, 0xA1, 0xA1, 0x10
     } }; // Bender's nightmare
@@ -257,9 +257,9 @@ namespace config
     uint64_t const CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 53;
     uint64_t const CRYPTONOTE_PUBLIC_INTEGRATED_ADDRESS_BASE58_PREFIX = 54;
     uint64_t const CRYPTONOTE_PUBLIC_SUBADDRESS_BASE58_PREFIX = 63;
-    uint16_t const P2P_DEFAULT_PORT = 39700;
-    uint16_t const RPC_DEFAULT_PORT = 39701;
-    uint16_t const ZMQ_RPC_DEFAULT_PORT = 39702;
+    uint16_t const P2P_DEFAULT_PORT = 28080;
+    uint16_t const RPC_DEFAULT_PORT = 28081;
+    uint16_t const ZMQ_RPC_DEFAULT_PORT = 28082;
     boost::uuids::uuid const NETWORK_ID = { {
         0x12 ,0x30, 0xF1, 0x71 , 0x61, 0x04 , 0x41, 0x61, 0x17, 0x31, 0x00, 0x82, 0x16, 0xA1, 0xA1, 0x11
       } }; // Bender's daydream

@@ -48,7 +48,6 @@
 #include "file_io_utils.h"
 #include "int-util.h"
 #include "common/threadpool.h"
-#include "common/boost_serialization_helper.h"
 #include "warnings.h"
 #include "crypto/hash.h"
 #include "cryptonote_core.h"
@@ -62,7 +61,7 @@
 #undef SHERKITTY_DEFAULT_LOG_CATEGORY
 #define SHERKITTY_DEFAULT_LOG_CATEGORY "blockchain"
 
-#define FIND_BLOCKCHAIN_SUPPLEMENT_MAX_SIZE (100*1038*1038) // 100 MB
+#define FIND_BLOCKCHAIN_SUPPLEMENT_MAX_SIZE (100*1024*1024) // 100 MB
 
 using namespace crypto;
 
@@ -456,6 +455,14 @@ bool Blockchain::init(BlockchainDB* db, const network_type nettype, bool offline
     if (!update_next_cumulative_weight_limit())
       return false;
   }
+
+  if (m_hardfork->get_current_version() >= RX_BLOCK_VERSION)
+  {
+    const crypto::hash seedhash = get_block_id_by_height(crypto::rx_seedheight(m_db->height()));
+    if (seedhash != crypto::null_hash)
+      rx_set_main_seedhash(seedhash.data, tools::get_max_concurrency());
+  }
+
   return true;
 }
 //------------------------------------------------------------------
@@ -570,6 +577,12 @@ void Blockchain::pop_blocks(uint64_t nblocks)
 
   if (stop_batch)
     m_db->batch_stop();
+
+  if (m_hardfork->get_current_version() >= RX_BLOCK_VERSION)
+  {
+    const crypto::hash seedhash = get_block_id_by_height(crypto::rx_seedheight(m_db->height()));
+    rx_set_main_seedhash(seedhash.data, tools::get_max_concurrency());
+  }
 }
 //------------------------------------------------------------------
 // This function tells BlockchainDB to remove the top block from the
@@ -1239,18 +1252,20 @@ bool Blockchain::switch_to_alternative_blockchain(std::list<block_extended_info>
   }
 
   m_hardfork->reorganize_from_chain_height(split_height);
-  get_block_longhash_reorg(split_height);
 
   std::shared_ptr<tools::Notify> reorg_notify = m_reorg_notify;
   if (reorg_notify)
     reorg_notify->notify("%s", std::to_string(split_height).c_str(), "%h", std::to_string(m_db->height()).c_str(),
         "%n", std::to_string(m_db->height() - split_height).c_str(), "%d", std::to_string(discarded_blocks).c_str(), NULL);
 
+  const uint64_t new_height = m_db->height();
+  const crypto::hash seedhash = get_block_id_by_height(crypto::rx_seedheight(new_height));
+
   crypto::hash prev_id;
   if (!get_block_hash(alt_chain.back().bl, prev_id))
     MERROR("Failed to get block hash of an alternative chain's tip");
   else
-    send_miner_notifications(prev_id, alt_chain.back().already_generated_coins);
+    send_miner_notifications(new_height, seedhash, prev_id, alt_chain.back().already_generated_coins);
 
   for (const auto& notifier : m_block_notifiers)
   {
@@ -1261,6 +1276,9 @@ bool Blockchain::switch_to_alternative_blockchain(std::list<block_extended_info>
       ++notify_height;
     }
   }
+
+  if (m_hardfork->get_current_version() >= RX_BLOCK_VERSION)
+    rx_set_main_seedhash(seedhash.data, tools::get_max_concurrency());
 
   MGINFO_GREEN("REORGANIZE SUCCESS! on height: " << split_height << ", new blockchain size: " << m_db->height());
   return true;
@@ -2001,7 +2019,7 @@ bool Blockchain::handle_alternative_block(const block& b, const crypto::hash& id
       {
         seedhash = get_block_id_by_height(seedheight);
       }
-      get_altblock_longhash(bei.bl, proof_of_work, get_current_blockchain_height(), bei.height, seedheight, seedhash);
+      get_altblock_longhash(bei.bl, proof_of_work, seedhash);
     } else
     {
       get_block_longhash(this, bei.bl, proof_of_work, bei.height, 0);
@@ -3613,7 +3631,7 @@ bool Blockchain::check_tx_inputs(transaction& tx, tx_verification_context &tvc, 
         }
       }
 
-      if (!rct::verRctNonSemanticsSimple(rv))
+      if (!rct::verRctNonSemanticsSimpleCached(rv))
       {
         MERROR_VER("Failed to check ringct signatures!");
         return false;
@@ -3804,8 +3822,8 @@ bool Blockchain::check_fee(size_t tx_weight, uint64_t fee) const
     }
     MDEBUG("Using " << print_money(fee_per_kb) << "/kB fee");
 
-    needed_fee = tx_weight / 1038;
-    needed_fee += (tx_weight % 1038) ? 1 : 0;
+    needed_fee = tx_weight / 1024;
+    needed_fee += (tx_weight % 1024) ? 1 : 0;
     needed_fee *= fee_per_kb;
   }
 
@@ -3868,7 +3886,7 @@ void Blockchain::get_dynamic_base_fee_estimate_2021_scaling(uint64_t grace_block
   epee::misc_utils::rolling_median_t<uint64_t> rm = m_long_term_block_weights_cache_rolling_median;
   for (size_t i = 0; i < grace_blocks; ++i)
     rm.insert(0);
-  const uint64_t Mlw_penalty_free_zone_for_wallet = std::max<uint64_t>(rm.median(), CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V5);
+  const uint64_t Mlw_penalty_free_zone_for_wallet = std::max<uint64_t>(rm.size() == 0 ? 0 : rm.median(), CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V5);
 
   // Msw: median over [100 - grace blocks] past + [grace blocks] future blocks
   CHECK_AND_ASSERT_THROW_MES(grace_blocks <= 100, "Grace blocks invalid In 2021 fee scaling estimate.");
@@ -4552,10 +4570,14 @@ leave:
     }
   }
 
-  send_miner_notifications(id, already_generated_coins);
+  const crypto::hash seedhash = get_block_id_by_height(crypto::rx_seedheight(new_height));
+  send_miner_notifications(new_height, seedhash, id, already_generated_coins);
 
   for (const auto& notifier: m_block_notifiers)
     notifier(new_height - 1, {std::addressof(bl), 1});
+
+  if (m_hardfork->get_current_version() >= RX_BLOCK_VERSION)
+    rx_set_main_seedhash(seedhash.data, tools::get_max_concurrency());
 
   return true;
 }
@@ -5604,7 +5626,7 @@ void Blockchain::cancel()
 }
 
 #if defined(PER_BLOCK_CHECKPOINT)
-static const char expected_block_hashes_hash[] = "52105e0e45013e4c6705d5b7902268f5989b6eea71f5a04160176297a79f4b32";
+static const char expected_block_hashes_hash[] = "e9371004b9f6be59921b27bc81e28b4715845ade1c6d16891d5c455f72e21365";
 void Blockchain::load_compiled_in_block_hashes(const GetCheckpointsCallback& get_checkpoints)
 {
   if (get_checkpoints == nullptr || !m_fast_sync)
@@ -5761,23 +5783,14 @@ void Blockchain::cache_block_template(const block &b, const cryptonote::account_
   m_btc_valid = true;
 }
 
-void Blockchain::send_miner_notifications(const crypto::hash &prev_id, uint64_t already_generated_coins)
+void Blockchain::send_miner_notifications(uint64_t height, const crypto::hash &seed_hash, const crypto::hash &prev_id, uint64_t already_generated_coins)
 {
   if (m_miner_notifiers.empty())
     return;
 
-  const uint64_t height = m_db->height();
   const uint8_t major_version = m_hardfork->get_ideal_version(height);
   const difficulty_type diff = get_difficulty_for_next_block();
   const uint64_t median_weight = m_current_block_cumul_weight_median;
-
-  crypto::hash seed_hash = crypto::null_hash;
-  if (m_hardfork->get_current_version() >= RX_BLOCK_VERSION)
-  {
-    uint64_t seed_height, next_height;
-    crypto::rx_seedheights(height, &seed_height, &next_height);
-    seed_hash = get_block_id_by_height(seed_height);
-  }
 
   std::vector<tx_block_template_backlog_entry> tx_backlog;
   m_tx_pool.get_block_template_backlog(tx_backlog);

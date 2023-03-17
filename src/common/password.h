@@ -40,7 +40,7 @@ namespace tools
   class password_container
   {
   public:
-    static constexpr const size_t max_password_size = 1038;
+    static constexpr const size_t max_password_size = 1024;
 
     //! Empty password
     password_container() noexcept;

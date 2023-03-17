@@ -45,7 +45,7 @@ bool gen_rct_tx_validation_base::generate_with_full(std::vector<test_event_entry
     const std::function<void(std::vector<tx_source_entry> &sources, std::vector<tx_destination_entry> &destinations)> &pre_tx,
     const std::function<void(transaction &tx)> &post_tx) const
 {
-  uint64_t ts_start = 0;
+  uint64_t ts_start = 1338224400;
 
   GENERATE_ACCOUNT(miner_account);
   MAKE_GENESIS_BLOCK(events, blk_0, miner_account, ts_start);

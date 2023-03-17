@@ -745,7 +745,7 @@ enum class LoggingFlag : base::type::EnumType {
   /// @brief Disable VModules
   DisableVModules = 512,
   /// @brief Disable VModules extensions
-  DisableVModulesExtensions = 1038,
+  DisableVModulesExtensions = 1024,
   /// @brief Enables hierarchical logging
   HierarchicalLogging = 2048,
   /// @brief Creates logger automatically when not available

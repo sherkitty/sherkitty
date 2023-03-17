@@ -183,7 +183,7 @@ static int resize_env(const char *db_path)
   MDB_stat mst;
   int ret;
 
-  size_t needed = 1000ul * 1038 * 1038; // at least 1000 MB
+  size_t needed = 1000ul * 1024 * 1024; // at least 1000 MB
 
   ret = mdb_env_info(env, &mei);
   if (ret)

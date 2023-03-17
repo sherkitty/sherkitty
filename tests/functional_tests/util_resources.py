@@ -40,7 +40,7 @@ import psutil
 
 def available_ram_gb():
     ram_bytes = psutil.virtual_memory().available
-    kilo = 1038.0
+    kilo = 1024.0
     ram_gb = ram_bytes / kilo**3
     return ram_gb
 

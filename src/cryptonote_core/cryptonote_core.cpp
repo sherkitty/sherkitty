@@ -1956,7 +1956,7 @@ namespace cryptonote
         if (good)
           MCLOG_CYAN(el::Level::Info, "updates", "New version downloaded to " << path.string());
       }, [this](const std::string &path, const std::string &uri, size_t length, ssize_t content_length) {
-        if (length >= m_last_update_length + 1038 * 1038 * 10)
+        if (length >= m_last_update_length + 1024 * 1024 * 10)
         {
           m_last_update_length = length;
           MCDEBUG("updates", "Downloaded " << length << "/" << (content_length ? std::to_string(content_length) : "unknown"));
@@ -1981,7 +1981,7 @@ namespace cryptonote
   bool core::check_disk_space()
   {
     uint64_t free_space = get_free_space();
-    if (free_space < 1ull * 1038 * 1038 * 1038) // 1 GB
+    if (free_space < 1ull * 1024 * 1024 * 1024) // 1 GB
     {
       const el::Level level = el::Level::Warning;
       MCLOG_RED(level, "global", "Free space is below 1 GB on " << m_config_folder);

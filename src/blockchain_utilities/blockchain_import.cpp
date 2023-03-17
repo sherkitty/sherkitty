@@ -265,13 +265,13 @@ int import_from_file(cryptonote::core& core, const std::string& import_file_path
     return false;
   }
 
-  // 4 byte magic + (currently) 1038 byte header structures
+  // 4 byte magic + (currently) 1024 byte header structures
   uint8_t major_version, minor_version;
   uint64_t dummy;
   bootstrap.seek_to_first_chunk(import_file, major_version, minor_version, dummy, dummy);
 
   std::string str1;
-  char buffer1[1038];
+  char buffer1[1024];
   char buffer_block[BUFFER_SIZE];
   block b;
   transaction tx;

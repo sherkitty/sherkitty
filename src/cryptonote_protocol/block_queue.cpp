@@ -181,7 +181,7 @@ void block_queue::print() const
   boost::unique_lock<boost::recursive_mutex> lock(mutex);
   MDEBUG("Block queue has " << blocks.size() << " spans");
   for (const auto &span: blocks)
-    MDEBUG("  " << span.start_block_height << " - " << (span.start_block_height+span.nblocks-1) << " (" << span.nblocks << ") - " << (span.blocks.empty() ? "scheduled" : "filled    ") << "  " << span.connection_id << " (" << ((unsigned)(span.rate*10/1038.f))/10.f << " kB/s)");
+    MDEBUG("  " << span.start_block_height << " - " << (span.start_block_height+span.nblocks-1) << " (" << span.nblocks << ") - " << (span.blocks.empty() ? "scheduled" : "filled    ") << "  " << span.connection_id << " (" << ((unsigned)(span.rate*10/1024.f))/10.f << " kB/s)");
 }
 
 std::string block_queue::get_overview(uint64_t blockchain_height) const

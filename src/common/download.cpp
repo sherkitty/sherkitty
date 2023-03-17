@@ -112,7 +112,7 @@ namespace tools
               boost::filesystem::space_info si = boost::filesystem::space(path);
               if (si.available < (size_t)content_length)
               {
-                const uint64_t avail = (si.available + 1023) / 1038, needed = (content_length + 1023) / 1038;
+                const uint64_t avail = (si.available + 1023) / 1024, needed = (content_length + 1023) / 1024;
                 MERROR("Not enough space to download " << needed << " kB to " << path << " (" << avail << " kB available)");
                 return false;
               }

@@ -52,8 +52,8 @@ sherkittyd_base = [builddir + "/bin/sherkittyd", "--regtest", "--fixed-difficult
 sherkittyd_extra = [
   ["--offline"],
   ["--rpc-payment-address", "44SKxxLQw929wRF6BA9paQ1EWFshNnKhXM3qz6Mo3JGDE2YG3xyzVutMStEicxbQGRfrYvAAYxH6Fe8rnD56EaNwUiqhcwR", "--rpc-payment-difficulty", str(DIFFICULTY), "--rpc-payment-credits", "5000", "--offline"],
-  ["--add-exclusive-node", "127.0.0.1:49713"],
-  ["--add-exclusive-node", "127.0.0.1:49712"],
+  ["--add-exclusive-node", "127.0.0.1:18283"],
+  ["--add-exclusive-node", "127.0.0.1:18282"],
 ]
 wallet_base = [builddir + "/bin/sherkitty-wallet-rpc", "--wallet-dir", WALLET_DIRECTORY, "--rpc-bind-port", "wallet_port", "--disable-rpc-login", "--rpc-ssl", "disabled", "--daemon-ssl", "disabled", "--log-level", "1", "--allow-mismatched-daemon-version"]
 wallet_extra = [
@@ -71,18 +71,18 @@ outputs = []
 ports = []
 
 for i in range(N_SHERKITTYDS):
-  command_lines.append([str(18180+i) if x == "sherkittyd_rpc_port" else str(49710+i) if x == "sherkittyd_p2p_port" else str(18380+i) if x == "sherkittyd_zmq_port" else "tcp://127.0.0.1:" + str(18480+i) if x == "sherkittyd_zmq_pub" else builddir + "/functional-tests-directory/sherkittyd" + str(i) if x == "sherkittyd_data_dir" else x for x in sherkittyd_base])
+  command_lines.append([str(18180+i) if x == "sherkittyd_rpc_port" else str(18280+i) if x == "sherkittyd_p2p_port" else str(18380+i) if x == "sherkittyd_zmq_port" else "tcp://127.0.0.1:" + str(18480+i) if x == "sherkittyd_zmq_pub" else builddir + "/functional-tests-directory/sherkittyd" + str(i) if x == "sherkittyd_data_dir" else x for x in sherkittyd_base])
   if i < len(sherkittyd_extra):
     command_lines[-1] += sherkittyd_extra[i]
   outputs.append(open(FUNCTIONAL_TESTS_DIRECTORY + '/sherkittyd' + str(i) + '.log', 'a+'))
   ports.append(18180+i)
 
 for i in range(N_WALLETS):
-  command_lines.append([str(56990+i) if x == "wallet_port" else x for x in wallet_base])
+  command_lines.append([str(18090+i) if x == "wallet_port" else x for x in wallet_base])
   if i < len(wallet_extra):
     command_lines[-1] += wallet_extra[i]
   outputs.append(open(FUNCTIONAL_TESTS_DIRECTORY + '/wallet' + str(i) + '.log', 'a+'))
-  ports.append(56990+i)
+  ports.append(18090+i)
 
 print('Starting servers...')
 try:
@@ -99,6 +99,8 @@ try:
   os.environ['MAKE_TEST_SIGNATURE'] = FUNCTIONAL_TESTS_DIRECTORY + '/make_test_signature'
   os.environ['SEEDHASH_EPOCH_BLOCKS'] = "8"
   os.environ['SEEDHASH_EPOCH_LAG'] = "4"
+  if not 'MINING_SILENT' in os.environ:
+    os.environ['MINING_SILENT'] = "1"
 
   for i in range(len(command_lines)):
     #print('Running: ' + str(command_lines[i]))

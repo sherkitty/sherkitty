@@ -46,7 +46,7 @@ namespace lmdb
 {
     namespace
     {
-        constexpr const mdb_size_t max_resize = 1 * 1038 * 1038 * 1038; // 1 GB
+        constexpr const mdb_size_t max_resize = 1 * 1024 * 1024 * 1024; // 1 GB
         void acquire_context(context& ctx) noexcept
         {
             while (ctx.lock.test_and_set());

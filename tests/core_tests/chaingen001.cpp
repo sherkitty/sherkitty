@@ -56,7 +56,7 @@ one_block::one_block()
 
 bool one_block::generate(std::vector<test_event_entry> &events)
 {
-    uint64_t ts_start = 0;
+    uint64_t ts_start = 1338224400;
 
     MAKE_GENESIS_BLOCK(events, blk_0, alice, ts_start);
     MAKE_ACCOUNT(events, alice);
@@ -103,7 +103,7 @@ gen_simple_chain_001::gen_simple_chain_001()
 
 bool gen_simple_chain_001::generate(std::vector<test_event_entry> &events)
 {
-    uint64_t ts_start = 0;
+    uint64_t ts_start = 1338224400;
 
     GENERATE_ACCOUNT(miner);
     GENERATE_ACCOUNT(alice);

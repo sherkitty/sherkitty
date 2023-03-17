@@ -126,7 +126,7 @@ gen_block_reward::gen_block_reward()
 
 bool gen_block_reward::generate(std::vector<test_event_entry>& events) const
 {
-  uint64_t ts_start = 0;
+  uint64_t ts_start = 1338224400;
 
   GENERATE_ACCOUNT(miner_account);
   MAKE_GENESIS_BLOCK(events, blk_0, miner_account, ts_start);

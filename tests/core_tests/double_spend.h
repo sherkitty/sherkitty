@@ -138,7 +138,7 @@ public:
 
 
 #define INIT_DOUBLE_SPEND_TEST()                                           \
-  uint64_t ts_start = 0;                                          \
+  uint64_t ts_start = 1338224400;                                          \
   GENERATE_ACCOUNT(miner_account);                                         \
   MAKE_GENESIS_BLOCK(events, blk_0, miner_account, ts_start);              \
   MAKE_ACCOUNT(events, bob_account);                                       \
