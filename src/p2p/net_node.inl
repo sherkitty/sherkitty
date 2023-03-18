@@ -60,9 +60,9 @@
 #include "cryptonote_core/cryptonote_core.h"
 #include "net/parse.h"
 
-#include <miniupnp/miniupnpc/miniupnpc.h>
-#include <miniupnp/miniupnpc/upnpcommands.h>
-#include <miniupnp/miniupnpc/upnperrors.h>
+#include <sherkitty/miniupnpc/miniupnpc.h>
+#include <sherkitty/miniupnpc/upnpcommands.h>
+#include <sherkitty/miniupnpc/upnperrors.h>
 
 #undef SHERKITTY_DEFAULT_LOG_CATEGORY
 #define SHERKITTY_DEFAULT_LOG_CATEGORY "net.p2p"
