@@ -1,5 +1,7 @@
 name: ci/gh-actions/depends
 
+steps:
+    - uses: actions/checkout@v3
 on:
   push:
     paths-ignore:
@@ -22,7 +24,7 @@ env:
 jobs:
   build-cross:
     runs-on: ubuntu-20.04
-    env:
+    env: 
       CCACHE_TEMPDIR: /tmp/.ccache-temp
     strategy:
       fail-fast: false
