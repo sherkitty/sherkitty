@@ -11,3 +11,9 @@
 	path = external/supercop
 	url = https://github.com/sherkitty/supercop
 	branch = sherkitty
+[submodule "https://github.com/sherkitty/miniupnp.git"]
+	path = https://github.com/sherkitty/miniupnp.git
+	url = external/miniupnp
+[submodule "external/miniupnp"]
+	path = external/miniupnp
+	url = https://github.com/sherkitty/miniupnp
