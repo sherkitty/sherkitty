@@ -1,6 +1,7 @@
 name: ci/gh-actions/gitian
 
-on:
+on:steps:
+    - uses: actions/checkout@v3
   push:
     tags:
       - '*'
