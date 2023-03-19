@@ -1,5 +1,6 @@
 name: ci/gh-actions/cli
-
+steps:
+    - uses: actions/checkout@v3
 on:
   push:
     paths-ignore:
