@@ -27,7 +27,7 @@ jobs:
     - name: prepare
       run: |
         sudo apt update
-        curl -O https://raw.githubusercontent.com/sherkitty-project/sherkitty/${{ github.ref_name }}/contrib/gitian/gitian-build.py
+        curl -O https://raw.githubusercontent.com/sherkitty/sherkitty/${{ github.ref_name }}/contrib/gitian/gitian-build.py
         chmod +x gitian-build.py
     - name: setup
       run: |
