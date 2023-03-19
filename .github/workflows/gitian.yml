@@ -1,4 +1,6 @@
 name: ci/gh-actions/gitian
+
+on:
   push:
     tags:
       - '*'
@@ -8,7 +10,6 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
-      uses: "actions/checkout@v3"
       matrix:
         operating-system:
           - name: "Linux"
@@ -26,7 +27,7 @@ jobs:
     - name: prepare
       run: |
         sudo apt update
-        curl -O https://raw.githubusercontent.com/sherkitty/sherkitty/${{ github.ref_name }}/contrib/gitian/gitian-build.py
+        curl -O https://raw.githubusercontent.com/sherkitty-project/sherkitty/${{ github.ref_name }}/contrib/gitian/gitian-build.py
         chmod +x gitian-build.py
     - name: setup
       run: |
@@ -41,7 +42,7 @@ jobs:
         echo \`\`\` >> $GITHUB_STEP_SUMMARY
         shasum -a256 * >> $GITHUB_STEP_SUMMARY
         echo \`\`\` >> $GITHUB_STEP_SUMMARY
-    - uses: actions/upload-artifact@v3.1.0
+    - uses: actions/upload-artifact@v3
       with:
         name: ${{ matrix.operating-system.name }}
         path: |
