@@ -1,5 +1,4 @@
 name: ci/gh-actions/gitian
-uses: actions/checkout@v3
   push:
     tags:
       - '*'
@@ -9,6 +8,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
+      uses: "actions/checkout@v3"
       matrix:
         operating-system:
           - name: "Linux"
